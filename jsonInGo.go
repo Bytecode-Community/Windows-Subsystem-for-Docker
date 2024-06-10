@@ -100,6 +100,6 @@ func jsonPop(jsonLink string) string {
 }
 
 func main() {
-	output := jsonAdd(`H:\\Documentos\\Projects\\Json-Golang\\message.json`, "oi", "", "", "") //apenas teste
+	output := jsonAdd(`H:\\Documentos\\Projects\\Json-Golang\\message.json`, "Pentagrama do oriente", "", "", "") //apenas teste
 	fmt.Println(output)
 }
