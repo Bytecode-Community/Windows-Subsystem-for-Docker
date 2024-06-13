@@ -82,15 +82,23 @@ func jsonDelete(jsonLink string, jsonValue interface{}) string {
 	comparerParam := "name"
 
 	switch jsonValue.(type) {
-	case float64:
+	case int:
 		comparerParam = "wsdID"
 	case string:
 		comparerParam = "name"
 	}
+
+	var comparerValue interface{}
+	if comparerParam == "wsdID" {
+		comparerValue = float64(jsonValue.(int))
+	}
+	if comparerParam == "name" {
+		comparerValue = jsonValue
+	}
 wsdIDLoop:
 	for i := len(list) - 1; i >= 0; i-- {
 		listComp := list[i].(map[string]interface{})
-		if listComp[comparerParam] == jsonValue && listComp["wsdID"] != nil {
+		if listComp[comparerParam] == comparerValue && listComp["wsdID"] != nil {
 			list = append(list[:i], list[i+1:]...)
 			break wsdIDLoop
 		}
