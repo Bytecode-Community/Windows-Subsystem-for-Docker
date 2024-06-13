@@ -65,7 +65,7 @@ wsdIDLoop:
 	return "success!"
 }
 
-func jsonPop(jsonLink string) string {
+func jsonDelete(jsonLink string, jsonValue interface{}) string {
 
 	jsonFile, err := os.Open(jsonLink)
 	if err != nil {
@@ -79,10 +79,24 @@ func jsonPop(jsonLink string) string {
 	defer jsonFile.Close()
 
 	list := data["profiles"].(map[string]interface{})["list"].([]interface{})
+	comparerParam := "name"
 
-	data["profiles"].(map[string]interface{})["list"] = list[:len(list)-1]
+	switch jsonValue.(type) {
+	case float64:
+		comparerParam = "wsdID"
+	case string:
+		comparerParam = "name"
+	}
+wsdIDLoop:
+	for i := len(list) - 1; i >= 0; i-- {
+		listComp := list[i].(map[string]interface{})
+		if listComp[comparerParam] == jsonValue && listComp["wsdID"] != nil {
+			list = append(list[:i], list[i+1:]...)
+			break wsdIDLoop
+		}
+	}
 
-	fmt.Println(list)
+	data["profiles"].(map[string]interface{})["list"] = list
 
 	//marshal
 	byteValueJSON, err = json.Marshal(data)
