@@ -157,9 +157,60 @@ func jsonViewAll(jsonLink string) string {
 	return output
 }
 
+func jsonView(jsonLink string, jsonValue interface{}) string {
+	data, err, jsonFile := dataFromJson(jsonLink)
+	if err != nil {
+		return fmt.Sprint(err)
+	}
+
+	list := data["profiles"].(map[string]interface{})["list"].([]interface{})
+	comparerParam := "name"
+
+	switch jsonValue.(type) {
+	case int:
+		comparerParam = "wsdID"
+	case string:
+		comparerParam = "name"
+	}
+
+	var comparerValue interface{}
+	if comparerParam == "wsdID" {
+		comparerValue = float64(jsonValue.(int))
+	}
+	if comparerParam == "name" {
+		comparerValue = jsonValue
+	}
+
+	var output string
+
+	for i := 0; i < len(list); i++ {
+		if list[i].(map[string]interface{})["wsdID"] != nil && list[i].(map[string]interface{})[comparerParam] == comparerValue {
+			output += "{\n\twsdid: " + strconv.Itoa(int(list[i].(map[string]interface{})["wsdID"].(float64))) + "\n"
+			output += "\tname: " + list[i].(map[string]interface{})["name"].(string) + "\n"
+			if list[i].(map[string]interface{})["commandLine"] != nil {
+				output += "\tcommandLine: " + list[i].(map[string]interface{})["commandLine"].(string) + "\n"
+			}
+			if list[i].(map[string]interface{})["startingDirectory"] != nil {
+				output += "\tstartingDirectory: " + list[i].(map[string]interface{})["startingDirectory"].(string) + "\n"
+			}
+			if list[i].(map[string]interface{})["icon"] != nil {
+				output += "\ticon: " + list[i].(map[string]interface{})["icon"].(string) + "\n"
+			}
+			output += "}\n"
+		}
+	}
+
+	err = jsonFromData(jsonLink, jsonFile, data)
+	if err != nil {
+		return fmt.Sprint(err)
+	}
+
+	return output
+}
+
 func main() {
 	var output string
-	//output = jsonAdd(`H:\\Documentos\\Projects\\Json-Golang\\message.json`, "batata inglesa média", "", "asdasadsaad", "")
+	output = jsonAdd(`H:\\Documentos\\Projects\\Json-Golang\\message.json`, "jimmy neutron africano", "", "", "")
 	/*
 		jsonAdd parâmetros:
 			caminho do JSON,
@@ -183,6 +234,14 @@ func main() {
 		jsonViewAll parâmetros:
 			caminho do JSON
 		retorno: string (a lista de todos os profiles criados com wsdid)
+	*/
+
+	output = jsonView(`H:\\Documentos\\Projects\\Json-Golang\\message.json`, "jimmy neutron africano")
+	/*
+		jsonViewAll parâmetros:
+			caminho do JSON,
+			wsdid(int), ou name(string)
+		retorno: string (o termo específico procurado com o wsdid ou name especificado na chamada da function)
 	*/
 
 	fmt.Println(output)
