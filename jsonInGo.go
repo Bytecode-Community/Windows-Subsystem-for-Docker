@@ -48,8 +48,6 @@ wsdIDLoop:
 
 	data["profiles"].(map[string]interface{})["list"] = append(list, newItem)
 
-	fmt.Println(list)
-
 	//marshal
 	byteValueJSON, err = json.Marshal(data)
 	if err != nil {
@@ -65,7 +63,7 @@ wsdIDLoop:
 	return "success!"
 }
 
-func jsonPop(jsonLink string) string {
+func jsonDelete(jsonLink string, jsonValue interface{}) string {
 
 	jsonFile, err := os.Open(jsonLink)
 	if err != nil {
@@ -79,10 +77,32 @@ func jsonPop(jsonLink string) string {
 	defer jsonFile.Close()
 
 	list := data["profiles"].(map[string]interface{})["list"].([]interface{})
+	comparerParam := "name"
 
-	data["profiles"].(map[string]interface{})["list"] = list[:len(list)-1]
+	switch jsonValue.(type) {
+	case int:
+		comparerParam = "wsdID"
+	case string:
+		comparerParam = "name"
+	}
 
-	fmt.Println(list)
+	var comparerValue interface{}
+	if comparerParam == "wsdID" {
+		comparerValue = float64(jsonValue.(int))
+	}
+	if comparerParam == "name" {
+		comparerValue = jsonValue
+	}
+wsdIDLoop:
+	for i := len(list) - 1; i >= 0; i-- {
+		listComp := list[i].(map[string]interface{})
+		if listComp[comparerParam] == comparerValue && listComp["wsdID"] != nil {
+			list = append(list[:i], list[i+1:]...)
+			break wsdIDLoop
+		}
+	}
+
+	data["profiles"].(map[string]interface{})["list"] = list
 
 	//marshal
 	byteValueJSON, err = json.Marshal(data)
@@ -100,6 +120,22 @@ func jsonPop(jsonLink string) string {
 }
 
 func main() {
-	output := jsonAdd(`H:\\Documentos\\Projects\\Json-Golang\\message.json`, "Pentagrama do oriente", "", "", "") //apenas teste
+	var output string
+	//output = jsonAdd(`H:\\Documentos\\Projects\\Json-Golang\\message.json`, "jimmy neutron africano", "", "", "")
+	/*jsonAdd parâmetros:
+		caminho do JSON,
+		propriedade "name",
+		propriedade "commandLine" ("" se não houver),
+		propriedade "startingDirectory" ("" se não houver),
+		propriedade "icon" ("" se não houver)
+	retorno: string (o erro ou um "success!")
+	*/
+
+	//output = jsonDelete(`H:\\Documentos\\Projects\\Json-Golang\\message.json`, "teste")
+	/*jsonDelete parâmetros:
+		caminho do JSON,
+		wsdid(int), ou name(string)
+	retorno: string (o erro ou um "success!")
+	*/
 	fmt.Println(output)
 }
