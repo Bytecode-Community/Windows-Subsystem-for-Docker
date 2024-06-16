@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"strconv"
 )
 
 func dataFromJson(jsonLink string) (map[string]interface{}, interface{}, *os.File) {
@@ -121,23 +122,68 @@ wsdIDLoop:
 	return "success!"
 }
 
+func jsonViewAll(jsonLink string) string {
+	data, err, jsonFile := dataFromJson(jsonLink)
+	if err != nil {
+		return fmt.Sprint(err)
+	}
+
+	list := data["profiles"].(map[string]interface{})["list"].([]interface{})
+
+	var output string
+
+	for i := 0; i < len(list); i++ {
+		if list[i].(map[string]interface{})["wsdID"] != nil {
+			output += "{\n\twsdid: " + strconv.Itoa(int(list[i].(map[string]interface{})["wsdID"].(float64))) + "\n"
+			output += "\tname: " + list[i].(map[string]interface{})["name"].(string) + "\n"
+			if list[i].(map[string]interface{})["commandLine"] != nil {
+				output += "\tcommandLine: " + list[i].(map[string]interface{})["commandLine"].(string) + "\n"
+			}
+			if list[i].(map[string]interface{})["startingDirectory"] != nil {
+				output += "\tstartingDirectory: " + list[i].(map[string]interface{})["startingDirectory"].(string) + "\n"
+			}
+			if list[i].(map[string]interface{})["icon"] != nil {
+				output += "\ticon: " + list[i].(map[string]interface{})["icon"].(string) + "\n"
+			}
+			output += "}\n"
+		}
+	}
+
+	err = jsonFromData(jsonLink, jsonFile, data)
+	if err != nil {
+		return fmt.Sprint(err)
+	}
+
+	return output
+}
+
 func main() {
 	var output string
-	//output = jsonAdd(`H:\\Documentos\\Projects\\Json-Golang\\message.json`, "jimmy neutron africano", "", "", "")
-	/*jsonAdd parâmetros:
-		caminho do JSON,
-		propriedade "name",
-		propriedade "commandLine" ("" se não houver),
-		propriedade "startingDirectory" ("" se não houver),
-		propriedade "icon" ("" se não houver)
-	retorno: string (o erro ou um "success!")
+	//output = jsonAdd(`H:\\Documentos\\Projects\\Json-Golang\\message.json`, "batata inglesa média", "", "asdasadsaad", "")
+	/*
+		jsonAdd parâmetros:
+			caminho do JSON,
+			propriedade "name",
+			propriedade "commandLine" ("" se não houver),
+			propriedade "startingDirectory" ("" se não houver),
+			propriedade "icon" ("" se não houver)
+		retorno: string (o erro ou um "success!")
 	*/
 
 	//output = jsonDelete(`H:\\Documentos\\Projects\\Json-Golang\\message.json`, "jimmy neutron africano")
-	/*jsonDelete parâmetros:
-		caminho do JSON,
-		wsdid(int), ou name(string)
-	retorno: string (o erro ou um "success!")
+	/*
+		jsonDelete parâmetros:
+			caminho do JSON,
+			wsdid(int), ou name(string)
+		retorno: string (o erro ou um "success!")
 	*/
+
+	//output = jsonViewAll(`H:\\Documentos\\Projects\\Json-Golang\\message.json`)
+	/*
+		jsonViewAll parâmetros:
+			caminho do JSON
+		retorno: string (a lista de todos os profiles criados com wsdid)
+	*/
+
 	fmt.Println(output)
 }
