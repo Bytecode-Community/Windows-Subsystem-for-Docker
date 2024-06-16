@@ -48,8 +48,6 @@ wsdIDLoop:
 
 	data["profiles"].(map[string]interface{})["list"] = append(list, newItem)
 
-	fmt.Println(list)
-
 	//marshal
 	byteValueJSON, err = json.Marshal(data)
 	if err != nil {
@@ -122,6 +120,22 @@ wsdIDLoop:
 }
 
 func main() {
-	output := jsonAdd(`H:\\Documentos\\Projects\\Json-Golang\\message.json`, "Pentagrama do oriente", "", "", "") //apenas teste
+	var output string
+	//output = jsonAdd(`H:\\Documentos\\Projects\\Json-Golang\\message.json`, "jimmy neutron africano", "", "", "")
+	/*jsonAdd parâmetros:
+		caminho do JSON,
+		propriedade "name",
+		propriedade "commandLine" ("" se não houver),
+		propriedade "startingDirectory" ("" se não houver),
+		propriedade "icon" ("" se não houver)
+	retorno: string (o erro ou um "success!")
+	*/
+
+	//output = jsonDelete(`H:\\Documentos\\Projects\\Json-Golang\\message.json`, "teste")
+	/*jsonDelete parâmetros:
+		caminho do JSON,
+		wsdid(int), ou name(string)
+	retorno: string (o erro ou um "success!")
+	*/
 	fmt.Println(output)
 }
