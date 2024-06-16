@@ -70,12 +70,7 @@ wsdIDLoop:
 
 	data["profiles"].(map[string]interface{})["list"] = append(list, newItem)
 
-<<<<<<< HEAD
 	err = jsonFromData(jsonLink, jsonFile, data)
-=======
-	//marshal
-	byteValueJSON, err = json.Marshal(data)
->>>>>>> c6c0595021eeed43eca6a088b876cf5d36973937
 	if err != nil {
 		return fmt.Sprint(err)
 	}
@@ -115,11 +110,6 @@ wsdIDLoop:
 			break wsdIDLoop
 		}
 	}
-<<<<<<< HEAD
-=======
-
-	data["profiles"].(map[string]interface{})["list"] = list
->>>>>>> c6c0595021eeed43eca6a088b876cf5d36973937
 
 	data["profiles"].(map[string]interface{})["list"] = list
 
@@ -143,11 +133,7 @@ func main() {
 	retorno: string (o erro ou um "success!")
 	*/
 
-<<<<<<< HEAD
 	//output = jsonDelete(`H:\\Documentos\\Projects\\Json-Golang\\message.json`, "jimmy neutron africano")
-=======
-	//output = jsonDelete(`H:\\Documentos\\Projects\\Json-Golang\\message.json`, "teste")
->>>>>>> c6c0595021eeed43eca6a088b876cf5d36973937
 	/*jsonDelete parâmetros:
 		caminho do JSON,
 		wsdid(int), ou name(string)
