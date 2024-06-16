@@ -236,7 +236,7 @@ func main() {
 		retorno: string (a lista de todos os profiles criados com wsdid)
 	*/
 
-	output = jsonView(`H:\\Documentos\\Projects\\Json-Golang\\message.json`, "jimmy neutron africano")
+	//output = jsonView(`H:\\Documentos\\Projects\\Json-Golang\\message.json`, "jimmy neutron africano")
 	/*
 		jsonViewAll parâmetros:
 			caminho do JSON,
