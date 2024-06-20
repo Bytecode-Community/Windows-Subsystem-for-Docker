@@ -23,7 +23,7 @@ func dataFromJson(jsonLink string) (map[string]interface{}, interface{}, *os.Fil
 }
 
 func jsonFromData(jsonLink string, jsonFile *os.File, data map[string]interface{}) interface{} {
-	byteValueJSON, err := json.MarshalIndent(data, "","\t")
+	byteValueJSON, err := json.MarshalIndent(data, "", "\t")
 	if err != nil {
 		return fmt.Sprint(err)
 	}
@@ -36,7 +36,7 @@ func jsonFromData(jsonLink string, jsonFile *os.File, data map[string]interface{
 	return nil
 }
 
-func jsonAdd(jsonLink string, name string, commandLine string, startingDirectory string, icon string) string {
+func jsonAdd(jsonLink string, name string, guid string, commandLine string, startingDirectory string, icon string) string {
 
 	data, err, jsonFile := dataFromJson(jsonLink)
 	if err != nil {
@@ -58,6 +58,7 @@ wsdIDLoop:
 	newItem := make(map[string]interface{})
 	newItem["wsdID"] = wsdID
 	newItem["name"] = name
+	newItem["guid"] = guid
 	if commandLine != "" {
 		newItem["commandLine"] = commandLine
 	}
