@@ -1,6 +1,5 @@
 package main
 
-//conferir https://go.dev/play/p/YbZ1niXyFBR
 import (
 	"encoding/json"
 	"fmt"
@@ -24,7 +23,7 @@ func dataFromJson(jsonLink string) (map[string]interface{}, interface{}, *os.Fil
 }
 
 func jsonFromData(jsonLink string, jsonFile *os.File, data map[string]interface{}) interface{} {
-	byteValueJSON, err := json.Marshal(data)
+	byteValueJSON, err := json.MarshalIndent(data, "","\t")
 	if err != nil {
 		return fmt.Sprint(err)
 	}
