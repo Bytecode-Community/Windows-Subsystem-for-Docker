@@ -210,7 +210,7 @@ func jsonView(jsonLink string, jsonValue interface{}) string {
 
 func main() {
 	var output string
-	output = jsonAdd(`H:\\Documentos\\Projects\\Json-Golang\\message.json`, "jimmy neutron africano", "", "", "")
+	output = jsonAdd(`H:\\Documentos\\Projects\\Json-Golang\\message.json`, "jimmy neutron africano", "{coloque-o-guid}", "", "", "")
 	/*
 		jsonAdd parâmetros:
 			caminho do JSON,
